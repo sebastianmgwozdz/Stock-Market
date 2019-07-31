@@ -6,37 +6,43 @@ public class Company {
     private LinkedHashSet<Day> days;
     private File file;
 
-    public Company(String ticker, File file) {
+    public Company(String ticker, File file) throws IOException {
         this.ticker = ticker;
         this.file = file;
         this.days = setDays();
     }
 
-    private LinkedHashSet<Day> setDays() {
+    private LinkedHashSet<Day> setDays() throws IOException {
         LinkedHashSet<Day> days = new LinkedHashSet<>();
-        try {
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-            DayReader dr = new DayReader(br);
 
-            Day firstLine = dr.readDay();
+        FileReader fr = new FileReader(file);
+        BufferedReader br = new BufferedReader(fr);
+        DayReader dr = new DayReader(br);
 
-            Day row = dr.readDay();
-            while (row != null && row.getName().charAt(0) <= ticker.charAt(0)) {
-                System.out.println(row.getName());
-                if (row.getName().equals(ticker)) {
-                    days.add(row);
-                }
+        scanFile(days, dr);
 
-                row = dr.readDay();
-            }
-            fr.close();
-            br.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        fr.close();
+        br.close();
 
         return days;
+    }
+
+    private void scanFile(LinkedHashSet<Day> days, DayReader dr) {
+        boolean done = false;
+        do {
+            try {
+                Day row = dr.readDay();
+                if (row == null) {
+                    done = true;
+                } else if (row.getName().charAt(0) > ticker.charAt(0)) {
+                    done = true;
+                } else if (row.getName().equals(ticker)) {
+                    days.add(row);
+                }
+            } catch (InvalidFormatException | IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+        } while (!done);
     }
 
     public String getTicker() {
