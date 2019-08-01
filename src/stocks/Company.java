@@ -1,9 +1,12 @@
+package stocks;
+
 import java.io.*;
 import java.util.LinkedHashSet;
+import java.util.TreeSet;
 
 public class Company {
     private String ticker;
-    private LinkedHashSet<Day> days;
+    private TreeSet<Day> days;
     private File file;
 
     public Company(String ticker, File file) throws IOException {
@@ -12,8 +15,8 @@ public class Company {
         this.days = setDays();
     }
 
-    private LinkedHashSet<Day> setDays() throws IOException {
-        LinkedHashSet<Day> days = new LinkedHashSet<>();
+    private TreeSet<Day> setDays() throws IOException {
+        TreeSet<Day> days = new TreeSet<>();
 
         FileReader fr = new FileReader(file);
         BufferedReader br = new BufferedReader(fr);
@@ -27,7 +30,7 @@ public class Company {
         return days;
     }
 
-    private void scanFile(LinkedHashSet<Day> days, DayReader dr) {
+    private void scanFile(TreeSet<Day> days, DayReader dr) {
         boolean done = false;
         do {
             try {
@@ -49,7 +52,7 @@ public class Company {
         return ticker;
     }
 
-    public LinkedHashSet<Day> getDays() {
+    public TreeSet<Day> getDays() {
         return days;
     }
 }

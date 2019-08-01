@@ -1,9 +1,9 @@
+package stocks;
+
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 public class DayReader {
     private BufferedReader br;
@@ -23,7 +23,7 @@ public class DayReader {
         String[] values = getValues(day);
 
         Date date = setDate(values);
-        HashMap<String, Double> data = setData(values);
+        TreeMap<String, Double> data = setData(values);
         String name = setName(values);
 
         return new Day(date, data, name);
@@ -65,8 +65,8 @@ public class DayReader {
         return new Date(year, month, day);
     }
 
-    private HashMap<String, Double> setData(String[] values) {
-        HashMap<String, Double> data = new HashMap<>();
+    private TreeMap<String, Double> setData(String[] values) {
+        TreeMap<String, Double> data = new TreeMap<>();
 
         for (int categoryIndex = 1; categoryIndex < 6; categoryIndex++) {
             String value = values[categoryIndex];

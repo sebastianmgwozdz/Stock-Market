@@ -1,3 +1,5 @@
+package stocks;
+
 public class Date {
     private String year;
     private String month;
@@ -19,5 +21,9 @@ public class Date {
 
     public String getDay() {
         return day;
+    }
+
+    public String toString() {
+        return year + "-" + month + "-" + day;
     }
 }
