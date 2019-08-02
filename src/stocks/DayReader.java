@@ -2,8 +2,8 @@ package stocks;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class DayReader {
     private BufferedReader br;
@@ -12,6 +12,26 @@ public class DayReader {
     public DayReader(BufferedReader br) throws IOException {
         this.br = br;
         br.readLine();
+    }
+
+    public TreeSet<String> getAllCompanyNames() {
+        TreeSet<String> names = new TreeSet<>();
+
+        boolean done = false;
+        do {
+            try {
+                Day row = readDay();
+                if (row == null) {
+                    done = true;
+                }
+                else if (!names.contains(row.getName())) {
+                    names.add(row.getName());
+                }
+            } catch (InvalidFormatException | IOException ex) {
+            }
+        } while (!done);
+
+        return names;
     }
 
     public Day readDay() throws IOException, InvalidFormatException {

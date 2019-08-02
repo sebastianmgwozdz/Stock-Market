@@ -1,15 +1,16 @@
 package stocks;
 
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.paint.Color;
 
 public class DataLabel extends Label {
     public DataLabel(String text) {
         super(text);
-        super.setTranslateY(150);
-        super.setStyle("-fx-border-color: black;");
-        super.setMinSize(125, 115);
+        super.setTranslateX(50);
+        super.setTranslateY(100);
+        super.setStyle("-fx-background-color: gray;");
+        super.setTextFill(Color.web("#FFFFFF"));
+        super.setMinSize(150, 115);
 
 
     }

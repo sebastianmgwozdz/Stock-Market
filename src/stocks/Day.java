@@ -1,7 +1,6 @@
 package stocks;
 
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.chart.XYChart;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -44,6 +43,9 @@ public class Day implements Comparable<Day>{
     }
 
     public boolean equals(Object other) {
+        if (getClass() != other.getClass()) {
+            return false;
+        }
         Day that = (Day) other;
         return this.compareTo(that) == 0;
     }
@@ -52,8 +54,10 @@ public class Day implements Comparable<Day>{
         double x = Integer.parseInt(date.getYear()) + Integer.parseInt(date.getMonth()) / 12.0;
         double y = data.get("close");
         XYChart.Data<Number, Number> d = new XYChart.Data<>(x, y);
+
         StackPane sp = getInfoBox();
         d.setNode(sp);
+
         return d;
     }
 
@@ -61,15 +65,17 @@ public class Day implements Comparable<Day>{
         StackPane sp = new StackPane();
         DataLabel label = new DataLabel(getInfoText());
 
-        sp.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        sp.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override public void handle(MouseEvent mouseEvent) {
-                if (sp.getChildren().contains(label)) {
-                    sp.getChildren().remove(label);
-                }
-                else {
-                    sp.getChildren().setAll(label);
-                    sp.toFront();
-                }
+                sp.getChildren().setAll(label);
+                sp.toFront();
+            }
+        });
+
+        sp.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                sp.getChildren().remove(label);
             }
         });
 
