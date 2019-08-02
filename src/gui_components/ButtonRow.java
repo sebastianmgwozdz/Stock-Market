@@ -7,12 +7,15 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+// Row of buttons under the stock viewer that allow the user to add more stocks or return to menu
 public class ButtonRow extends HBox {
     private Button returnButton;
     private Stage stage;
 
     public ButtonRow(Stage stage, Chart c) {
         setAlignment(Pos.CENTER);
+
+        // Adjust spacing between elements
         setSpacing(40);
 
         this.stage = stage;
@@ -25,6 +28,7 @@ public class ButtonRow extends HBox {
         this.getChildren().addAll(cc, returnButton);
     }
 
+    // Set button to return to menu upon click
     private void setReturnButton() {
         returnButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override

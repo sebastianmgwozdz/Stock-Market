@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 
 import java.io.*;
 
+// Initializes the JavaFX Application
 public class App extends Application {
     public static final File FILE = new File("all_stocks_5yr.csv");
 

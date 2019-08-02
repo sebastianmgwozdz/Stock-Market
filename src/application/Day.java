@@ -1,13 +1,11 @@
 package application;
 
-import gui_components.DataLabel;
-import javafx.event.EventHandler;
+import gui_components.InfoBox;
 import javafx.scene.chart.XYChart;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 
 import java.util.TreeMap;
 
+// Represents one recorded day/line from the data file
 public class Day implements Comparable<Day>{
     private Date date;
     private TreeMap<String, Double> data;
@@ -31,19 +29,13 @@ public class Day implements Comparable<Day>{
         return name;
     }
 
+    // Day objects are sorted alphabetically
     public int compareTo(Day other) {
-        if (!(date.getYear().equals(other.date.getYear()))) {
-            return date.getYear().compareTo(other.date.getYear());
-        }
-        else if (!(date.getMonth().equals(other.date.getMonth()))) {
-            return date.getMonth().compareTo(other.date.getMonth());
-        }
-        else {
-            return date.getDay().compareTo((other.date.getDay()));
-        }
+        return date.toString().compareTo(other.date.toString());
     }
 
     public boolean equals(Object other) {
+        // Checks class type equality
         if (getClass() != other.getClass()) {
             return false;
         }
@@ -51,57 +43,17 @@ public class Day implements Comparable<Day>{
         return this.compareTo(that) == 0;
     }
 
+    // Returns an object with the x/y values of the point
     public XYChart.Data getDataPoint() {
+        // X axis represents the date, y represents the closing price of the stock
         double x = Integer.parseInt(date.getYear()) + Integer.parseInt(date.getMonth()) / 12.0;
         double y = data.get("close");
+
         XYChart.Data<Number, Number> d = new XYChart.Data<>(x, y);
 
-        StackPane sp = getInfoBox();
+        InfoBox sp = new InfoBox(this);
         d.setNode(sp);
 
         return d;
     }
-
-    private StackPane getInfoBox() {
-        StackPane sp = new StackPane();
-        DataLabel label = new DataLabel(getInfoText());
-
-        sp.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent mouseEvent) {
-                sp.getChildren().setAll(label);
-                sp.toFront();
-            }
-        });
-
-        sp.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                sp.getChildren().remove(label);
-            }
-        });
-
-        sp.setMaxSize(1, 1);
-
-        return sp;
-    }
-
-    private String getInfoText() {
-        String s = "";
-        s += "  Date: " + date.toString();
-        for (String category : data.keySet()) {
-            s += "\n  " + capitalize(category) + ": " + data.get(category);
-        }
-
-        return s;
-    }
-
-    private String capitalize(String s) {
-        String capitalized = "";
-        capitalized += s.substring(0, 1).toUpperCase();
-        for (int i = 1; i < s.length(); i++) {
-            capitalized += s.substring(i, i + 1);
-        }
-        return capitalized;
-    }
-
 }

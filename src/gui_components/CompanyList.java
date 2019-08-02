@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.TreeSet;
 
+// Shows a list of all companies found in the file
 public class CompanyList extends VBox {
     private Button button;
     private ScrollPane list;
@@ -33,8 +34,9 @@ public class CompanyList extends VBox {
         this.getChildren().add(button);
     }
 
+    // Creates button that displays the list when pressed
     private void setButton() {
-        Button button = new Button("Click for list of all companies");
+        Button button = new Button("List of companies");
 
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -47,6 +49,7 @@ public class CompanyList extends VBox {
         this.button = button;
     }
 
+    // Creates the scroll window
     private void setList() throws IOException {
         VBox vb = loadCompanies();
 
@@ -54,11 +57,14 @@ public class CompanyList extends VBox {
         sp.setMaxWidth(150);
         sp.setPrefHeight(150);
         sp.setContent(vb);
+
+        // Sets the scroll bar to always be visible
         sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 
         this.list = sp;
     }
 
+    // Gets all company names and loads them into the list
     private VBox loadCompanies() throws IOException {
         VBox vb = new VBox();
 

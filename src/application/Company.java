@@ -3,21 +3,24 @@ package application;
 import java.io.*;
 import java.util.TreeSet;
 
+// Models a given company from the Stock Market. Tracks the ticker and every recorded day.
 public class Company {
     private String ticker;
     private TreeSet<Day> days;
-    private File file;
 
-    public Company(String ticker, File file) throws IOException, CompanyDoesNotExistException {
+    public Company(String ticker) throws IOException, CompanyDoesNotExistException {
         this.ticker = ticker;
-        this.file = file;
         this.days = setDays();
+    }
+
+    public TreeSet<Day> getDays() {
+        return days;
     }
 
     private TreeSet<Day> setDays() throws IOException, CompanyDoesNotExistException {
         TreeSet<Day> days = new TreeSet<>();
 
-        FileReader fr = new FileReader(file);
+        FileReader fr = new FileReader(App.FILE);
         BufferedReader br = new BufferedReader(fr);
         DayReader dr = new DayReader(br);
 
@@ -29,14 +32,18 @@ public class Company {
         return days;
     }
 
+    // Parses the data file and gets all records for this company
     private void scanFile(TreeSet<Day> days, DayReader dr) throws CompanyDoesNotExistException {
         boolean done = false;
         do {
             try {
                 Day row = dr.readDay();
+                // Check for end of file
                 if (row == null) {
                     done = true;
-                } else if (row.getName().charAt(0) > ticker.charAt(0)) {
+                }
+                // Check if all the company's records have been added
+                else if (row.getName().charAt(0) > ticker.charAt(0)) {
                     done = true;
                 } else if (row.getName().equals(ticker)) {
                     days.add(row);
@@ -49,13 +56,5 @@ public class Company {
         if (days.size() == 0) {
             throw new CompanyDoesNotExistException("Company doesn't exist");
         }
-    }
-
-    public String getTicker() {
-        return ticker;
-    }
-
-    public TreeSet<Day> getDays() {
-        return days;
     }
 }

@@ -1,6 +1,5 @@
 package gui_components;
 
-import application.App;
 import application.Company;
 import application.CompanyDoesNotExistException;
 import javafx.event.ActionEvent;
@@ -22,7 +21,7 @@ public class CompanySubmission extends VBox {
         setAlignment(Pos.CENTER);
         setSpacing(15);
 
-        this.prompt = new Label("Enter a company ticker");
+        this.prompt = new Label("Enter a company ticker:");
         this.prompt.setFont(new Font("Arial", 36));
 
         this.tf = new TextField();
@@ -34,23 +33,26 @@ public class CompanySubmission extends VBox {
         this.getChildren().addAll(prompt, tf, submitButton);
     }
 
+    // Sets button to display stock window given a valid ticker
     private void setSubmitButton(Stage stage) {
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 StockViewer viewer = new StockViewer(stage);
+
                 if (!tf.getText().equals("")) {
                     try {
-                        Company company = new Company(tf.getText().toUpperCase(), App.FILE);
+                        Company company = new Company(tf.getText().toUpperCase());
+
                         viewer.getChart().addCompany(company);
+                        viewer.createAndShowChart();
                     } catch (IOException | CompanyDoesNotExistException e) {
                         Alert alert = new Alert(Alert.AlertType.NONE, "Could not find " + tf.getText() + ". Please enter another company.", ButtonType.OK);
                         alert.showAndWait();
+
                         tf.clear();
-                        System.out.println(e.getMessage());
                     }
                 }
-                viewer.createAndShowChart();
             }
         });
     }

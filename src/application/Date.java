@@ -5,10 +5,10 @@ public class Date {
     private String month;
     private String day;
 
-    public Date(String year, String month, String day) {
-        this.year = year;
-        this.month = month;
-        this.day = day;
+    public Date(String date) {
+        this.year = date.substring(0, 4);;
+        this.month = date.substring(5, 7);
+        this.day = date.substring(8, 10);
     }
 
     public String getYear() {

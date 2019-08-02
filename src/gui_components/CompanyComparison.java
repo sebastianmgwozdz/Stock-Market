@@ -1,6 +1,5 @@
 package gui_components;
 
-import application.App;
 import application.Company;
 import application.CompanyDoesNotExistException;
 import javafx.event.ActionEvent;
@@ -36,11 +35,13 @@ public class CompanyComparison extends HBox {
                     return;
                 }
 
+                // Try to add company data
                 try {
-                    Company c = new Company(tf.getText().toUpperCase(), App.FILE);
+                    Company c = new Company(tf.getText().toUpperCase());
                     chart.addCompany(c);
                     chart.fillData();
                 } catch (IOException | CompanyDoesNotExistException e) {
+                    // Show dialog on user's screen alerting them
                     Alert alert = new Alert(Alert.AlertType.NONE, "Could not find " + tf.getText() + ". Please enter another company.", ButtonType.OK);
                     alert.showAndWait();
 
