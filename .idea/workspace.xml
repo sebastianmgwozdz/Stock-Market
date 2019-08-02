@@ -44,7 +44,7 @@
   </component>
   <component name="RunManager">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="stocks.App" />
+      <option name="MAIN_CLASS_NAME" value="application.App" />
       <module name="Stock-Market" />
       <method v="2">
         <option name="Make" enabled="true" />
