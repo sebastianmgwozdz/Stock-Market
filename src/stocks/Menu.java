@@ -4,10 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -20,31 +19,33 @@ import java.util.TreeSet;
 
 public class Menu extends VBox {
     private Stage stage;
-    private File file;
+    public static final File FILE = new File("all_stocks_5yr.csv");
 
     public Menu(Stage stage) {
         super();
         this.stage = stage;
-        this.file = new File("all_stocks_5yr.csv");
     }
 
     public void createAndShowMenu() {
         setAlignment(Pos.CENTER);
+        setStyle("-fx-background-color: #2ECC71");
+
+        Image logo = new Image("file:logo.jpg");
 
         Label label = new Label("Enter a company ticker");
         label.setFont(new Font("Arial", 36));
 
         TextField textField = new TextField();
-        textField.setMaxWidth(100);
+        textField.setMaxWidth(200);
 
         Button submit = getSubmitButton(textField);
 
         Button companyListButton = getCompanyListButton();
 
-        getChildren().addAll(label, textField, submit, companyListButton);
-        setSpacing(10);
+        getChildren().addAll(new ImageView(logo), label, textField, submit, companyListButton);
+        setSpacing(25);
 
-        Scene s = new Scene(this, 1080, 720);
+        Scene s = new Scene(this, 1440, 900);
         stage.setScene(s);
 
         stage.show();
@@ -73,7 +74,7 @@ public class Menu extends VBox {
 
         ScrollPane sp = new ScrollPane();
         sp.setMaxWidth(150);
-        sp.setPrefHeight(135);
+        sp.setPrefHeight(150);
         sp.setContent(vb);
         sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         return sp;
@@ -82,7 +83,7 @@ public class Menu extends VBox {
     private VBox loadCompanies() throws IOException {
         VBox vb = new VBox();
 
-        FileReader fr = new FileReader(file);
+        FileReader fr = new FileReader(FILE);
         BufferedReader br = new BufferedReader(fr);
         DayReader dr = new DayReader(br);
 
@@ -101,10 +102,13 @@ public class Menu extends VBox {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    Company a = new Company(tf.getText(), file);
+                    Company a = new Company(tf.getText().toUpperCase(), FILE);
                     StockViewer viewer = new StockViewer(a, stage);
                     viewer.createAndShowChart();
                 } catch (IOException | CompanyDoesNotExistException e) {
+                    Alert alert = new Alert(Alert.AlertType.NONE, "Could not find " + tf.getText() + ". Please enter another company.", ButtonType.OK);
+                    alert.showAndWait();
+                    tf.clear();
                     System.out.println(e.getMessage());
                 }
             }
